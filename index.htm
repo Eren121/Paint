@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title="Paint"></title>
+		<meta charset="UTF-9">
+		<style>
+			canvas {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			pre {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="effects">
+			<pre id="add">
+				#version 100
+				precision highp float;
+				uniform vec2 mouse;
+				uniform sampler2D t;
+				uniform vec4 color;
+				
+				varying vec2 c;
+				
+				void main() {
+				
+					gl_FragColor = texture2D(t, vec2(c.x, c.y)) + vec4(clamp(1.0 - distance(c, mouse) * 10.0, 0.0, 1.0)) * color;
+					gl_FragColor.a = 1.0;
+				}
+			</pre>
+		</div>
+		<pre id="frag">
+			#version 100
+			precision highp float;
+			uniform sampler2D t;
+			varying vec2 c;
+			
+			void main() {
+				gl_FragColor = texture2D(t, c);
+			}
+		</pre>
+		<pre id="vert">
+			#version 100
+			precision highp float;
+			attribute vec2 p;
+			varying vec2 c;
+			
+			void main() {
+				gl_Position = vec4(p, 0, 1.0);
+				c = (p + 1.0) / 2.0;
+			}
+		</pre>
+		<canvas width=1920 height=1080></canvas>
+		<script src="paint.js"></script>
+	</body>
+</html
